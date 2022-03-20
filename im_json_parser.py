@@ -10,14 +10,16 @@ class MyApp(QWidget):
 
         self.setWindowTitle('IM_JSON2csv')
         self.setGeometry(1000,50,800,800)
+
         self.key_list = QLineEdit(self)
         self.json_content = QPlainTextEdit(self)
+
         self.btn1= QPushButton('제출',self)
         self.btn1.clicked.connect(self.button_event)
+
         self.tableWidget = QTableWidget(self)
         self.tableWidget.resize(300,300)
         self.tableWidget.setSortingEnabled(True)
-        #self.tableWidget.setFont(Qfont())
 
         layout = QVBoxLayout()
         layout.addWidget(self.key_list)
@@ -38,17 +40,15 @@ class MyApp(QWidget):
         df=pd.DataFrame(json_content)
         df.to_csv('sample.tsv', sep='\t')
 
-        print(df.columns)
-
         self.tableWidget.setRowCount(len(json_content))
         self.tableWidget.setColumnCount(len(df.columns))
         self.tableWidget.setHorizontalHeaderLabels(df.columns)
+        header=self.tableWidget.horizontalHeader()
 
-        #for i in enumerate(json_content):
-        #    for j in enumerate(df.columns):
-        #        self.tableWidget.setItem(i,j,)
-
-
+        for i in range(0, len(df.columns)):
+            header.setSectionResizeMode(i, QHeaderView.ResizeToContents)
+            for j in range(0,len(json_content)):
+                self.tableWidget.setItem(i,j,QTableWidgetItem(df.iloc[i,j]))
 
 
 if __name__ == '__main__':
